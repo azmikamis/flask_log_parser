@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Log Parser</title>
+  <!-- styles -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+</head>
+<body>
+  <p><a href="{{ url_for('ipaddresses') }}">IP addresses</a></p>
+  IP: <input type="text" id="ipaddress">
+  <button type="button" id="getlog">Get log</button>
+
+  <table id="logs">
+    <thead>
+      <th>Logs</th>
+    </thead>
+  
+    <tbody>      
+    </tbody>
+  </table> 
+ 
+  <script type=text/javascript src="{{ url_for('static', filename='js/jquery-3.2.1.min.js') }}"></script>
+  <script type=text/javascript>
+    $(function() {
+      $('button#getlog').bind('click', function() {
+        var ipaddress = $('input#ipaddress').val();
+        $.getJSON('/logs/'+ ipaddress, function(data) {
+          tbl_body = "";
+          $.each(data, function() {
+            var tbl_row = "";
+            $.each(this, function(k , v) {
+                tbl_row += "<td>"+v+"</td>";
+            })
+            tbl_body += "<tr>"+tbl_row+"</tr>";
+          })
+          $("table#logs tbody").html(tbl_body);
+        });
+      });
+    });
+  </script>
+</body>
+</html>
